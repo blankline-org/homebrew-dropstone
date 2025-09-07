@@ -1,0 +1,16 @@
+cask "dropstone" do
+  version "2.0.1"
+  sha256 :no_check
+
+  url "https://github.com/blankline-org/dropstone-releases/releases/download/v#{version}/Dropstone-v#{version}-macOS.zip"
+  name "Dropstone"
+  desc "File management and organization tool"
+  homepage "https://github.com/blankline-org/dropstone-releases"
+
+  app "Dropstone.app"
+
+  zap trash: [
+    "~/Library/Preferences/com.blankline.dropstone.plist",
+    "~/Library/Application Support/Dropstone",
+  ]
+end
