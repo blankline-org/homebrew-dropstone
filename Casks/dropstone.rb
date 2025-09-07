@@ -9,6 +9,12 @@ cask "dropstone" do
 
   app "Dropstone.app"
 
+  postflight do
+    system_command "/usr/bin/xattr",
+                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Dropstone.app"],
+                   sudo: false
+  end
+
   zap trash: [
     "~/Library/Preferences/com.blankline.dropstone.plist",
     "~/Library/Application Support/Dropstone",
