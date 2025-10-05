@@ -4,10 +4,16 @@ cask "dropstone" do
 
   url "https://github.com/blankline-org/dropstone-releases/releases/download/v#{version}/Dropstone-v#{version}-macOS.zip"
   name "Dropstone"
-  desc "File management and organization tool"
+  desc "Self-learning AI IDE that understands your codebase and automates development tasks"
   homepage "https://github.com/blankline-org/dropstone-releases"
 
   app "Dropstone.app"
+
+  preflight do
+    system_command "/bin/rm",
+                   args: ["-rf", "#{appdir}/Dropstone.app"],
+                   sudo: false
+  end
 
   postflight do
     system_command "/usr/bin/xattr",
