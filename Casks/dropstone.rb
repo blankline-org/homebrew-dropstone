@@ -7,7 +7,7 @@ cask "dropstone" do
   desc "Self-learning AI IDE that understands your codebase and automates development tasks"
   homepage "https://github.com/blankline-org/dropstone-releases"
 
-  app "Dropstone.app"
+  app "VSCode-darwin-arm64/Dropstone.app"
 
   preflight do
     system_command "/bin/rm",
