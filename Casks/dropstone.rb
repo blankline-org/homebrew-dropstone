@@ -9,16 +9,19 @@ cask "dropstone" do
 
   app "Dropstone.app"
 
-  preflight do
-    system_command "/bin/rm",
-                   args: ["-rf", "#{appdir}/Dropstone.app"],
-                   sudo: false
-  end
+  # 'preflight' block removed. 
+  # Homebrew automatically handles removing/overwriting previous versions 
+  # during upgrades. Manual deletion here causes the "App source not there" error.
 
   postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Dropstone.app"],
-                   sudo: false
+    # Removes the quarantine attribute to prevent "App is damaged" errors.
+    # We verify the path exists first to be safe.
+    target_path = "#{appdir}/Dropstone.app"
+    if File.exist?(target_path)
+      system_command "/usr/bin/xattr",
+                     args: ["-dr", "com.apple.quarantine", target_path],
+                     sudo: false
+    end
   end
 
   zap trash: [
