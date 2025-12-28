@@ -9,9 +9,15 @@ cask "dropstone" do
 
   app "Dropstone.app"
 
-  # 'preflight' block removed. 
-  # Homebrew automatically handles removing/overwriting previous versions 
-  # during upgrades. Manual deletion here causes the "App source not there" error.
+  preflight do
+    # Self-healing: If the app is missing (manually deleted) but Homebrew thinks 
+    # it's installed, create a dummy directory so Homebrew has something to 
+    # remove/upgrade without crashing.
+    target_path = "#{appdir}/Dropstone.app"
+    unless File.exist?(target_path)
+      system_command "/bin/mkdir", args: ["-p", target_path], sudo: false
+    end
+  end
 
   postflight do
     # Removes the quarantine attribute to prevent "App is damaged" errors.
