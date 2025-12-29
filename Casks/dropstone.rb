@@ -10,12 +10,12 @@ cask "dropstone" do
   app "Dropstone.app"
 
   # 1. PREFLIGHT: The "Self-Healing" Hack
-  preflight do
-    target_path = "#{appdir}/Dropstone.app"
-    unless File.exist?(target_path)
-      system_command "/bin/mkdir", args: ["-p", target_path], sudo: false
-    end
-  end
+  # preflight do
+  #   target_path = "#{appdir}/Dropstone.app"
+  #   unless File.exist?(target_path)
+  #     system_command "/bin/mkdir", args: ["-p", target_path], sudo: false
+  #   end
+  # end
 
   # 2. POSTFLIGHT: Quarantine Fix + Branded Interface + Auto-Launch
   postflight do
