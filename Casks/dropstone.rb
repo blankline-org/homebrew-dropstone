@@ -9,56 +9,16 @@ cask "dropstone" do
 
   app "Dropstone.app"
 
-  # 1. PREFLIGHT: The "Self-Healing" Hack
-  # preflight do
-  #   target_path = "#{appdir}/Dropstone.app"
-  #   unless File.exist?(target_path)
-  #     system_command "/bin/mkdir", args: ["-p", target_path], sudo: false
-  #   end
-  # end
+  preflight do
+    system_command "/bin/rm",
+                   args: ["-rf", "#{appdir}/Dropstone.app"],
+                   sudo: false
+  end
 
-  # 2. POSTFLIGHT: Quarantine Fix + Branded Interface + Auto-Launch
   postflight do
-    # A. Fix "App is damaged" quarantine error
-    target_path = "#{appdir}/Dropstone.app"
-    if File.exist?(target_path)
-      system_command "/usr/bin/xattr",
-                     args: ["-dr", "com.apple.quarantine", target_path],
-                     sudo: false
-    end
-
-    # B. Render Interface (Cyan BG + Black Text)
-    # \033[46m = Cyan Background
-    # \033[30m = Black Foreground
-    # \033[1m  = Bold
-    brand_style = "\033[46m\033[30m\033[1m"
-    cyan_text   = "\033[36m"
-    grey_text   = "\033[90m"
-    reset       = "\033[0m"
-
-    # We use explicit spacing inside the brand_style block to create the "Bar" effect
-    puts <<-EOS
-
-#{brand_style}        DROPSTONE           #{reset}
-#{brand_style}       v#{version}               #{reset}
-
-#{grey_text}   ---------------------------#{reset}
-
-#{cyan_text}   ✓#{reset}   Core files extracted
-#{cyan_text}   ✓#{reset}   Quarantine attributes cleared
-#{cyan_text}   ✓#{reset}   Local environment integration
-#{cyan_text}   ✓#{reset}   Neural engine dependencies verified
-
-#{grey_text}   ---------------------------#{reset}
-
-   #{cyan_text}INSTALLATION COMPLETE.#{reset}
-   To manage your account and API keys, visit:
-   #{cyan_text}https://dropstone.io/dashboard#{reset}
-
-    EOS
-
-    # C. Auto-Launch the App
-    system_command "/usr/bin/open", args: ["-a", target_path], sudo: false
+    system_command "/usr/bin/xattr",
+                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Dropstone.app"],
+                   sudo: false
   end
 
   zap trash: [
