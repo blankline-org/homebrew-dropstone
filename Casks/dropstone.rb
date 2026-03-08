@@ -7,9 +7,15 @@ cask "dropstone" do
   desc "Self-learning AI IDE that understands your codebase and automates development tasks"
   homepage "https://github.com/blankline-org/dropstone-releases"
 
-  app "Dropstone.app"
+  # PREFLIGHT: Safely remove the existing app to prevent "App already exists" errors
+  preflight do
+    target_path = "#{appdir}/Dropstone.app"
+    if File.exist?(target_path)
+      FileUtils.rm_rf(target_path)
+    end
+  end
 
-  # REMOVED PREFLIGHT BLOCK (This was causing your "App already exists" error)
+  app "Dropstone.app"
 
   # POSTFLIGHT: Quarantine Fix + Branded Interface + Auto-Launch
   postflight do
@@ -30,7 +36,7 @@ cask "dropstone" do
 
     puts <<-EOS
 
-#{brand_style}        DROPSTONE            #{reset}
+#{brand_style}        DROPSTONE             #{reset}
 #{brand_style}       v#{version}                #{reset}
 
 #{grey_text}   ---------------------------#{reset}
